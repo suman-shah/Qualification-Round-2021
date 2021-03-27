@@ -1,117 +1,34 @@
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 using namespace std;
 
+void solve(int t){
+	cout << "Case #" << t << ": ";
+	int x, y;
+	string s;
+	cin >> x >> y >> s;
+	int n = (int)s.size();
+	vector<vector<int> > dp(n+1, vector<int>(2, 1e9));
+	dp[0][0] = dp[0][1] = 0;
+	for(int i = 1; i <= n; i++){
+		for(int c = 0; c < 2; c++){
+			if(c == 0 && s[i-1] == 'J') continue;
+			if(c == 1 && s[i-1] == 'C') continue;
+			for(int d = 0; d < 2; d++){
+				int cost = 0;
+				if(i > 1){
+					if(d == 0 && c == 1) cost += x;
+					if(d == 1 && c == 0) cost += y;
+				}
+				dp[i][c] = min(dp[i][c], dp[i-1][d] + cost);
+			}
+		}
+	}
+	cout << min(dp[n][0], dp[n][1]) << '\n';
+}
+
 int main(){
-    int t;
-    cin>>t;
-    
-    for(int z=1;z<=t;++z){
-        cout<<"Case #"<<z<<": ";
-        
-        int x,y;
-        cin>>x>>y;
-        
-        string s;
-        cin>>s;
-        
-        long long ans=0;
-        
-        if(s.size()==1){
-            cout<<0<<endl;
-            continue;
-        }
-        
-        for(int i=0;i<s.size();++i){
-            if(i==0||i==s.size()-1){
-                if(i==0){
-                    if(s[i]=='?'){
-                        char ch='0';
-                       for(int j=i+1;j<s.size();++j){
-                           if(s[j]!='?'){
-                               ch=s[j];
-                               break;
-                           }
-                       }
-                       
-                       if(ch=='0'){
-                           s[i]='C';
-                       }
-                       else{
-                           s[i]=ch;
-                       }
-                    }
-                }
-                else{
-                    if(s[i]=='?'){
-                       char ch='0';
-                       for(int j=i-1;j>=0;--j){
-                           if(s[j]!='?'){
-                               ch=s[i];
-                               break;
-                           }
-                       }
-                       
-                       if(ch=='0'){
-                           s[i]='C';
-                       }
-                       else{
-                           s[i]=ch;
-                       } 
-                    }
-                    else{
-                        if(s[i]=='C'){
-                            if(s[i-1]=='J'){
-                                ans+=y;
-                            }
-                        }
-                        else{
-                            if(s[i-1]=='C' && s[i]=='J')ans+=x;
-                        }
-                    }
-                }
-            }
-            else{
-                if(s[i]=='?'){
-                    
-                 char ch='0';
-                 for(int j=i+1;j<s.size();++j){
-                     if(s[j]!='?'){
-                         ch=s[j];
-                         break;
-                     }
-                 }
-                 
-                 if(s[i-1]==ch ||ch=='0'){
-                     s[i]=ch;
-                 }
-                 else{
-                     if(s[i-1]=='C'){
-                     
-                         s[i]='C';
-                     }
-                     else{
-                     
-                         s[i]='J';
-                     }
-                 }
-                
-                }
-                else{
-                    if(s[i]=='C'){
-                        if(s[i-1]=='J'){
-                            ans+=y;
-                        }
-                         
-                    }
-                    else{
-                        if(s[i-1]=='C'){
-                            ans+=x;
-                        }
-                    }
-                }
-            }
-            //cout<<ans<<' ';
-        }
-        cout<<ans<<endl;
-    }
+	ios_base::sync_with_stdio(false), cin.tie(nullptr);
+	int T;
+	cin >> T;
+	for(int t = 1; t <= T; t++) solve(t);
 }
